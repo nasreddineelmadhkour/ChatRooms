@@ -1,0 +1,452 @@
+/* --- 1. Reset & Base --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: hidden; /* لمنع التمرير الخارجي */
+}
+
+.app-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding: 10px;
+}
+
+/* --- 2. Card Login --- */
+.login-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.5s ease;
+}
+
+.header h1 { color: #333; margin-bottom: 10px; text-align: center; }
+.header p { color: #777; font-size: 0.9rem; text-align: center; margin-bottom: 25px; }
+
+/* Sélecteur d'avatar */
+.avatar-selector { margin-bottom: 20px; text-align: center; }
+.avatar-selector label { display: block; margin-bottom: 10px; color: #555; font-weight: 600; }
+.avatars { display: flex; gap: 8px; justify-content: center; font-size: 1.6rem; flex-wrap: wrap; }
+.avatars span { 
+    cursor: pointer; 
+    padding: 5px; 
+    border-radius: 50%; 
+    border: 2px solid transparent; 
+    transition: all 0.2s ease; 
+}
+.avatars span:hover { background: #f0f2ff; transform: scale(1.1); }
+.avatars span.active { border-color: #667eea; background: #f0f2ff; transform: scale(1.2); }
+
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; margin-bottom: 5px; color: #555; font-weight: 600; }
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    outline: none;
+    transition: 0.3s;
+}
+.input-group input:focus { border-color: #667eea; background: #fff; }
+
+.join-btn {
+    width: 100%;
+    padding: 14px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+.join-btn:hover { background: #5a6fd6; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+
+/* --- 3. Main Chat Layout --- */
+.chat-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    height: 90vh;
+    gap: 15px;
+    animation: fadeIn 0.5s ease;
+    transition: filter 0.4s ease, transform 0.4s ease;
+}
+.chat-layout.is-blurred {
+  filter: blur(5px);
+  pointer-events: none;
+  transform: scale(0.999); /* تصحيح من 0.1 إلى 0.98 */
+  user-select: none;
+}
+/* Sidebar Membres */
+.sidebar {
+    width: 240px;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* لإخفاء الـ Sidebar على الموبايل الصغير جداً أو تخصيصه */
+@media (max-width: 768px) {
+    .sidebar { display: none; } /* يمكنك برمجتها لتفتح كقائمة جانبية لاحقاً */
+}
+
+.sidebar h3 { 
+    margin-bottom: 15px; 
+    font-size: 1rem; 
+    color: #333; 
+    border-bottom: 2px solid #f0f2ff;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-list { overflow-y: auto; flex: 1; }
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: 0.2s;
+}
+.user-item:hover { background: #f8f9ff; }
+.user-avatar { font-size: 1.2rem; }
+.user-name { font-weight: 500; color: #444; font-size: 0.9rem; }
+
+/* Fenêtre de Chat Principale */
+.chat-window {
+    flex: 1;
+    background: #f5f7fb;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+/* --- 4. Chat Components --- */
+.chat-header {
+    background: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.room-info { display: flex; align-items: center; gap: 10px; }
+.status-dot { 
+    width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; 
+    box-shadow: 0 0 5px #2ecc71;
+    animation: pulse 2s infinite;
+}
+.room-info h3 { margin: 0; font-size: 1rem; color: #333; }
+.room-info small { color: #888; font-size: 0.8rem; }
+
+.leave-btn { 
+    background: #ff4757; color: white; border: none; 
+    padding: 6px 14px; border-radius: 8px; cursor: pointer; 
+    font-weight: 600; font-size: 0.8rem; transition: 0.3s;
+}
+.leave-btn:hover { background: #e84118; transform: scale(1.05); }
+
+/* Zone des messages */
+.message-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+}
+
+.message-wrapper { display: flex; width: 100%; }
+.message-wrapper.me { justify-content: flex-end; }
+.message-wrapper.others { justify-content: flex-start; }
+
+.message-content {
+    max-width: 80%;
+    padding: 8px;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.me .message-content { background: #667eea; color: white; border-bottom-right-radius: 2px; }
+.others .message-content { background: white; color: #333; border-bottom-left-radius: 2px; }
+
+.sender-name { font-size: 0.7rem; font-weight: bold; display: block; margin-bottom: 3px; opacity: 0.8; }
+.text { margin: 0; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
+.time { font-size: 0.6rem; display: block; text-align: right; margin-top: 5px; opacity: 0.7; }
+
+/* Message Système */
+.system-msg {
+    display: flex; justify-content: center; width: 100%; margin: 10px 0;
+}
+.system-text {
+    background: rgba(0, 0, 0, 0.05); color: #777;
+    padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+}
+
+/* Typing notification */
+.typing-notif {
+    font-size: 0.8rem; color: #999; font-style: italic; padding: 0 10px 5px;
+}
+
+/* Zone de saisie (Input Area) */
+.chat-input-area {
+    padding: 15px 20px;
+    background: white;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-top: 1px solid #eee;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 12px 18px;
+    border: 1px solid #eee;
+    background: #f9f9f9;
+    border-radius: 25px;
+    outline: none;
+    font-size: 0.95rem;
+}
+.chat-input-area input:focus { border-color: #667eea; background: white; }
+
+.send-btn {
+    background: #667eea; color: white; border: none;
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.3s; flex-shrink: 0;
+}
+.send-btn:hover { transform: scale(1.1); background: #5a6fd6; }
+
+/* --- 5. Emojis --- */
+.emoji-picker-container { position: relative; display: flex; align-items: center; }
+.emoji-trigger {
+    background: none; border: none; font-size: 1.4rem; cursor: pointer;
+    transition: transform 0.2s; padding: 5px;
+}
+.emoji-trigger:hover { transform: scale(1.2); }
+
+.emoji-picker {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    width: 280px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideUp 0.2s ease-out;
+}
+
+.emoji-picker span {
+    cursor: pointer; 
+    font-size: 1.4rem; /* تكبير الإيموجي قليلاً */
+    width: 40px;      /* عرض ثابت لكل زر إيموجي */
+    height: 40px;     /* طول ثابت لجعلها مربعة */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.emoji-picker span:hover { background: #f0f2ff; transform: scale(1.1); }
+
+.emoji-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.emoji-tabs span {
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.emoji-tabs span.active {
+    background: #e0e7ff;
+}
+
+/* شبكة الإيموجي */
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 إيموجي في الصف الواحد */
+    gap: 5px;
+    padding: 10px;
+    max-height: 200px; /* طول القائمة */
+    overflow-y: auto;
+}
+
+.emoji-grid span {
+    cursor: pointer;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    transition: transform 0.1s;
+}
+
+.emoji-grid span:hover {
+    background: #f0f2ff;
+    transform: scale(1.2);
+}
+
+/* تخصيص السكرول بار للقائمة */
+.emoji-grid::-webkit-scrollbar { width: 4px; }
+.emoji-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+
+
+/* --- 6. Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+
+
+
+
+
+.chat-img {
+max-width: 100%;       /* لا تخرج عن إطار الرسالة */
+  max-height: 250px;     /* طول مناسب للدردشة */
+  border-radius: 10px;   /* زوايا ناعمة */
+  margin-top: 5px;
+  display: block;
+  cursor: pointer;
+  object-fit: contain;
+}
+
+
+.chat-img:hover {
+  transform: scale(1.02);
+}
+
+.image-wrapper {
+  margin-bottom: 5px;
+}
+
+
+
+/* أضف هذا الجزء في ملف الـ CSS الخاص بك */
+.quick-actions {
+    display: flex;
+    gap: 8px;
+    padding: 5px 20px;
+    background: transparent;
+    margin-bottom: -5px;
+}
+
+.quick-btn {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.quick-btn:hover {
+    background: #f0f2ff;
+    transform: translateY(-2px);
+    border-color: #667eea;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #ccc; }
+
+.dimension-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dimension-selector span {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.size-options {
+  display: flex;
+  gap: 8px;
+}
+
+.size-options button {
+  padding: 6px 12px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+  color: #475569;
+}
+
+.size-options button:hover {
+  border-color: #6366f1;
+  background: #f8fafc;
+}
+
+.size-options button.active {
+  background: #6366f1;
+  color: white;
+  border-color: #6366f1;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+/* تنسيق إضافي لجعل اللوحة مرنة */
+.game-grid {
+  display: grid;
+  /* نستخدم gridTemplateColumns المرتبط بـ boardSize */
+  grid-template-columns: repeat(v-bind(boardSize), 1fr);
+  gap: 8px;
+  background: #cbd5e1;
+  padding: 10px;
+  border-radius: 16px;
+}

@@ -1,0 +1,55 @@
+export default {
+  database: {
+    name: "CHATAPP",
+    type: "mssql",
+    host: "172.17.20.34",
+    username: "sa",
+    password: "FUELFACS",
+    port: "1433",
+    charset: "utf8",
+    recordlimit: 10,
+    ordertype: "DESC",
+  },
+  mail: {
+    username: "",
+    password: "",
+    senderemail: "",
+    sendername: "",
+    host: "",
+    secure: true,
+    port: "",
+  },
+  upload: {
+    tempDir: "uploads/temp/",
+    import_data: {
+      filenameType: "timestamp",
+      extensions: "json,csv",
+      limit: "10",
+      maxFileSize: "3",
+      returnFullpath: "false",
+      filenamePrefix: "",
+      uploadDir: "uploads/files/",
+    },
+
+    filename: {
+      filenameType: "random",
+      extensions: "docx,doc,xls,xlsx,xml,csv,pdf,xps",
+      limit: "1",
+      maxFileSize: "3",
+      returnFullpath: false,
+      filenamePrefix: "",
+      uploadDir: "uploads/files",
+      imageResize: [
+        { name: "small", width: 100, height: 100, mode: "cover" },
+        { name: "medium", width: 480, height: 480, mode: "inside" },
+        { name: "large", width: 1024, height: 760, mode: "inside" },
+      ],
+    },
+  },
+  s3: {
+    secretAccessKey: "",
+    accessKeyId: "",
+    region: "us-west-2",
+    bucket: "",
+  },
+};
