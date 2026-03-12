@@ -176,7 +176,7 @@
 import { ref, onMounted, nextTick, onUnmounted, computed, watch } from 'vue';
 import io from 'socket.io-client';
 
-const socket = io('http://172.17.20.244:3001'); 
+const socket = io('http://41.226.3.154:7074'); 
 
 // --- حالات الدردشة الأساسية ---
 const username = ref('');
